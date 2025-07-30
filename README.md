@@ -3,7 +3,6 @@
 ![License](https://img.shields.io/badge/license-GPLv3-lightgrey.svg)
 ![Status](https://img.shields.io/badge/status-Alpha-orange.svg)
 ![Contributions](https://img.shields.io/badge/contributions-welcome-blueviolet.svg)
-![Built With](https://img.shields.io/badge/built_with-python)
 
 ---
 
