@@ -1,4 +1,4 @@
-# 🗣️ Drift
+# Drift
 
 ![License](https://img.shields.io/badge/license-GPLv3-lightgrey.svg)
 ![Status](https://img.shields.io/badge/status-Alpha-orange.svg)
