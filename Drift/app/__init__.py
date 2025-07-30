@@ -13,7 +13,13 @@ login_manager = LoginManager()
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        static_folder=os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "..", "static"
+        ),
+        static_url_path="/static",
+    )
 
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
@@ -34,9 +40,11 @@ def create_app():
 
     from app.main import bp as main_bp
     from app.auth import bp as auth_bp
+    from app.user import bp as user_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(user_bp, url_prefix="/user")
 
     with app.app_context():
         db.create_all()

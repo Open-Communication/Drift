@@ -1,0 +1,747 @@
+{% extends "base.html" %} {% block title %}My Profile{% endblock %} {% block
+content %}
+<div class="my-profile-container">
+  <div class="profile-header-section">
+    <div class="profile-banner">
+      <div class="banner-gradient"></div>
+      <div class="profile-header-content">
+        <div class="profile-avatar-section">
+          <div class="avatar-wrapper">
+            <img
+              src="{{ user.avatar or url_for('static', filename='default-avatar.png') }}"
+              alt="Your avatar"
+              class="profile-avatar"
+            />
+            <button class="avatar-edit-btn" title="Change Avatar">
+              <i class="bi bi-camera-fill"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-header-info">
+          <h1 class="profile-name">
+            {{ user.first_name }} {{ user.last_name }}
+          </h1>
+          <p class="profile-username">@{{ user.username }}</p>
+          <div class="profile-badges">
+            <span class="badge member-badge">
+              <i class="bi bi-shield-check"></i>
+              Member since {{ user.created_at.strftime('%B %Y') }}
+            </span>
+            {% if user.newsletter %}
+            <span class="badge newsletter-badge">
+              <i class="bi bi-envelope-heart"></i>
+              Newsletter Subscriber
+            </span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-main">
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon threads">
+            <i class="bi bi-chat-square-text"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-number">
+              {{ user.threads|length if user.threads else 0 }}
+            </div>
+            <div class="stat-label">Threads Created</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon replies">
+            <i class="bi bi-reply-all"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-number">
+              {{ user.replies|length if user.replies else 0 }}
+            </div>
+            <div class="stat-label">Replies Made</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon likes">
+            <i class="bi bi-heart-fill"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-number">
+              {{ user.likes_received|length if user.likes_received else 0 }}
+            </div>
+            <div class="stat-label">Likes Received</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon days">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-number">{{ (now() - user.created_at).days }}</div>
+            <div class="stat-label">Days Active</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="info-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="bi bi-person-circle"></i>
+            Personal Information
+          </h3>
+          <a href="/settings" class="edit-btn">
+            <i class="bi bi-pencil"></i>
+            Edit
+          </a>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-person"></i>
+              Full Name
+            </div>
+            <div class="info-value">
+              {{ user.first_name }} {{ user.last_name }}
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-at"></i>
+              Username
+            </div>
+            <div class="info-value">@{{ user.username }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-envelope"></i>
+              Email Address
+            </div>
+            <div class="info-value">{{ user.email }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <i class="bi bi-calendar3"></i>
+              Join Date
+            </div>
+            <div class="info-value">
+              {{ user.created_at.strftime('%B %d, %Y') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Preferences -->
+      <div class="info-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="bi bi-gear"></i>
+            Account Preferences
+          </h3>
+          <a href="/settings" class="edit-btn">
+            <i class="bi bi-pencil"></i>
+            Edit
+          </a>
+        </div>
+
+        <div class="preferences-list">
+          <div class="preference-item">
+            <div class="preference-info">
+              <div class="preference-label">
+                <i class="bi bi-envelope-heart"></i>
+                Newsletter Subscription
+              </div>
+              <div class="preference-desc">
+                Receive updates about new features and community highlights
+              </div>
+            </div>
+            <div class="preference-toggle">
+              <div
+                class="toggle-switch {{ 'active' if user.newsletter else '' }}"
+              >
+                <div class="toggle-slider"></div>
+              </div>
+              <span class="toggle-label"
+                >{{ 'Enabled' if user.newsletter else 'Disabled' }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="actions-section">
+        <div class="action-buttons">
+          <a href="/settings" class="btn btn-primary">
+            <i class="bi bi-gear"></i>
+            <span>Account Settings</span>
+          </a>
+          <a href="/my-threads" class="btn btn-outline-primary">
+            <i class="bi bi-chat-square-text"></i>
+            <span>My Threads</span>
+          </a>
+          <a href="/privacy" class="btn btn-outline-secondary">
+            <i class="bi bi-shield-lock"></i>
+            <span>Privacy Settings</span>
+          </a>
+          <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+            <i class="bi bi-house"></i>
+            <span>Back to Home</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .my-profile-container {
+    min-height: calc(100vh - 100px);
+    padding-bottom: 2rem;
+  }
+
+  .profile-header-section {
+    margin-bottom: 2rem;
+  }
+
+  .profile-banner {
+    position: relative;
+    height: 200px;
+    background: linear-gradient(
+      135deg,
+      var(--drift-primary),
+      var(--drift-secondary),
+      var(--drift-accent)
+    );
+    border-radius: 0 0 24px 24px;
+    overflow: hidden;
+  }
+
+  .banner-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.9),
+      rgba(139, 92, 246, 0.8),
+      rgba(6, 182, 212, 0.9)
+    );
+    backdrop-filter: blur(20px);
+  }
+
+  .profile-header-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    padding: 2rem;
+    color: white;
+  }
+
+  .profile-avatar-section {
+    margin-right: 1.5rem;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+
+  .profile-avatar:hover {
+    transform: scale(1.05);
+  }
+
+  .avatar-edit-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: var(--drift-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .avatar-edit-btn:hover {
+    background: white;
+    transform: scale(1.1);
+  }
+
+  .profile-header-info {
+    flex-grow: 1;
+  }
+
+  .profile-name {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-username {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0 0 1rem 0;
+    font-weight: 500;
+  }
+
+  .profile-badges {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .profile-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] .stat-card {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: white;
+  }
+
+  .stat-icon.threads {
+    background: linear-gradient(
+      135deg,
+      var(--drift-primary),
+      var(--drift-secondary)
+    );
+  }
+
+  .stat-icon.replies {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+
+  .stat-icon.likes {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+  }
+
+  .stat-icon.days {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--drift-dark);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 0.25rem;
+  }
+
+  [data-theme="dark"] .stat-label {
+    color: #94a3b8;
+  }
+
+  .info-section {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="dark"] .info-section {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="dark"] .section-header {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--drift-dark);
+    margin: 0;
+  }
+
+  .section-title i {
+    color: var(--drift-primary);
+  }
+
+  .edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--drift-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    background: var(--drift-primary);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .info-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  [data-theme="dark"] .info-label {
+    color: #94a3b8;
+  }
+
+  .info-label i {
+    color: var(--drift-primary);
+  }
+
+  .info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--drift-dark);
+  }
+
+  .preferences-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .preference-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(248, 250, 252, 0.8);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  [data-theme="dark"] .preference-item {
+    background: rgba(15, 23, 42, 0.8);
+  }
+
+  .preference-item:hover {
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .preference-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: var(--drift-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .preference-label i {
+    color: var(--drift-primary);
+  }
+
+  .preference-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  [data-theme="dark"] .preference-desc {
+    color: #94a3b8;
+  }
+
+  .preference-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .toggle-switch {
+    width: 48px;
+    height: 28px;
+    background: #e2e8f0;
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .toggle-switch.active {
+    background: var(--drift-primary);
+  }
+
+  .toggle-slider {
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .toggle-switch.active .toggle-slider {
+    transform: translateX(20px);
+  }
+
+  .toggle-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--drift-dark);
+  }
+
+  .actions-section {
+    margin-top: 2rem;
+  }
+
+  .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: linear-gradient(
+      135deg,
+      var(--drift-primary),
+      var(--drift-secondary)
+    );
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    color: white;
+  }
+
+  .btn-outline-primary {
+    border: 2px solid var(--drift-primary);
+    color: var(--drift-primary);
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .btn-outline-primary:hover {
+    background: var(--drift-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-secondary {
+    border: 2px solid #64748b;
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.05);
+  }
+
+  .btn-outline-secondary:hover {
+    background: #64748b;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: #64748b;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+    color: white;
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .profile-content {
+      padding: 0 1rem;
+    }
+
+    .profile-header-content {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .profile-avatar-section {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+
+    .profile-name {
+      font-size: 1.75rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .action-buttons {
+      grid-template-columns: 1fr;
+    }
+
+    .preference-item {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .profile-badges {
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}

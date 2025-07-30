@@ -13,6 +13,9 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), nullable=False)
     last_name = db.Column(db.String(64), nullable=False)
 
+    bio = db.Column(db.Text, nullable=True)
+    static = db.Column(db.Text, nullable=True)
+
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     avatar = db.Column(db.String(255), nullable=True)

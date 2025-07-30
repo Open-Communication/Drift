@@ -28,3 +28,5 @@ class RegisterForm(FlaskForm):
     terms = BooleanField("Agree to Terms", validators=[DataRequired()])
     newsletter = BooleanField("Subscribe to Newsletter")
     submit = SubmitField("Register")
+
+
