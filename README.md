@@ -16,7 +16,7 @@ If it’s not **illegal**, and it doesn’t violate the **U.S. Constitution**, i
 > No shadowbans.  
 > No takedowns.  
 > No silent flagging.  
-GPLv3
+
 Just **real conversation** — unfiltered, uncensored, and unapologetically free.
 
 
