@@ -1,6 +1,6 @@
 # 🗣️ Drift
 
-![License](https://img.shields.io/badge/license-Custom-lightgrey.svg)
+![License](https://img.shields.io/badge/license-GPLv3-lightgrey.svg)
 ![Status](https://img.shields.io/badge/status-Alpha-orange.svg)
 ![Contributions](https://img.shields.io/badge/contributions-welcome-blueviolet.svg)
 ![Built With](https://img.shields.io/badge/built_with-python)
@@ -16,7 +16,7 @@ If it’s not **illegal**, and it doesn’t violate the **U.S. Constitution**, i
 > No shadowbans.  
 > No takedowns.  
 > No silent flagging.  
-
+GPLv3
 Just **real conversation** — unfiltered, uncensored, and unapologetically free.
 
 
