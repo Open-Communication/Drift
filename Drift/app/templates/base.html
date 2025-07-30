@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}New Page{% endblock %} | Drift</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --drift-primary: #6366f1;
+        --drift-secondary: #8b5cf6;
+        --drift-accent: #06b6d4;
+        --drift-dark: #1e293b;
+        --drift-light: #f8fafc;
+      }
+
+      [data-theme="dark"] {
+        --drift-primary: #818cf8;
+        --drift-secondary: #a78bfa;
+        --drift-accent: #22d3ee;
+        --drift-dark: #f1f5f9;
+        --drift-light: #0f172a;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          var(--drift-light) 0%,
+          #e2e8f0 100%
+        );
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        min-height: 100vh;
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="dark"] body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="dark"] .navbar {
+        background: rgba(15, 23, 42, 0.95) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: var(--drift-dark) !important;
+        letter-spacing: -0.02em;
+        transition: all 0.3s ease;
+      }
+
+      .navbar-brand:hover {
+        color: var(--drift-primary) !important;
+        transform: scale(1.02);
+      }
+
+      /* Remove content wrapper */
+      .content-wrapper {
+        flex-grow: 1;
+      }
+
+      footer {
+        background: rgba(248, 250, 252, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        margin-top: 4rem;
+        padding: 3rem 0 2rem;
+      }
+
+      [data-theme="dark"] footer {
+        background: rgba(15, 23, 42, 0.95);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-section h5 {
+        color: var(--drift-dark);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+      }
+
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-section ul li a {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .footer-section ul li a:hover {
+        color: var(--drift-primary);
+      }
+
+      [data-theme="dark"] .footer-section ul li a {
+        color: #94a3b8;
+      }
+
+      /* Enhanced Theme Toggle */
+      .theme-toggle {
+        margin-bottom: 1rem;
+      }
+
+      .theme-toggle label {
+        display: block;
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+      }
+
+      [data-theme="dark"] .theme-toggle label {
+        color: #94a3b8;
+      }
+
+      .theme-switcher {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        position: relative;
+      }
+
+      .theme-option {
+        position: relative;
+        cursor: pointer;
+        padding: 0.6rem;
+        border-radius: 12px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: rgba(100, 116, 139, 0.1);
+        border: 2px solid transparent;
+        overflow: hidden;
+      }
+
+      .theme-option::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          var(--drift-primary),
+          var(--drift-accent)
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 10px;
+      }
+
+      .theme-option:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: rgba(100, 116, 139, 0.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      [data-theme="dark"] .theme-option:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .theme-option.active {
+        background: linear-gradient(
+          135deg,
+          var(--drift-primary),
+          var(--drift-accent)
+        );
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+      }
+
+      .theme-option.active::before {
+        opacity: 1;
+      }
+
+      .theme-option i {
+        font-size: 1.2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Default icon colors */
+      .theme-option[data-theme="light"] i {
+        color: #f59e0b;
+      }
+
+      .theme-option[data-theme="dark"] i {
+        color: #6366f1;
+      }
+
+      .theme-option[data-theme="system"] i {
+        color: #64748b;
+      }
+
+      [data-theme="dark"] .theme-option[data-theme="system"] i {
+        color: #94a3b8;
+      }
+
+      /* Active state - white icons */
+      .theme-option.active i {
+        color: white;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+
+      /* Hover animations */
+      .theme-option:hover i {
+        transform: rotate(12deg) scale(1.1);
+      }
+
+      .theme-option[data-theme="dark"]:hover i {
+        transform: rotate(-12deg) scale(1.1);
+      }
+
+      .theme-option[data-theme="system"]:hover i {
+        transform: rotateY(180deg) scale(1.1);
+      }
+
+      /* Click animation */
+      @keyframes themeSwitch {
+        0% {
+          transform: scale(1.1) rotate(0deg);
+        }
+        25% {
+          transform: scale(1.3) rotate(90deg);
+        }
+        50% {
+          transform: scale(1.4) rotate(180deg);
+          box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6);
+        }
+        75% {
+          transform: scale(1.3) rotate(270deg);
+        }
+        100% {
+          transform: scale(1.1) rotate(360deg);
+        }
+      }
+
+      .theme-option.switching {
+        animation: themeSwitch 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      /* Ripple effect */
+      .theme-option::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.5s ease;
+      }
+
+      .theme-option.clicked::after {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        padding-top: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      [data-theme="dark"] .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .footer-text {
+        color: #64748b;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      [data-theme="dark"] .footer-text {
+        color: #94a3b8;
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .social-links a {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .social-links a:hover {
+        color: var(--drift-primary);
+      }
+
+      [data-theme="dark"] .social-links a {
+        color: #94a3b8;
+      }
+
+      @media (max-width: 768px) {
+        .footer-content {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 768px) {
+        .navbar-brand {
+          font-size: 1.3rem;
+        }
+      }
+
+      /* Content styling enhancements */
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: var(--drift-dark);
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--drift-primary),
+          var(--drift-secondary)
+        );
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      }
+    </style>
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+
+    {% block head %}{% endblock %}
+  </head>
+  <body class="d-flex flex-column">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/">Drift</a>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h5>Product</h5>
+            <ul>
+              <li><a href="/features">Features</a></li>
+              <li><a href="/changelog">Changelog</a></li>
+              <li><a href="/roadmap">Roadmap</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h5>Community</h5>
+            <ul>
+              <li><a href="/threads">Browse Threads</a></li>
+              <li><a href="/users">Active Users</a></li>
+              <li><a href="/guidelines">Guidelines</a></li>
+              <li><a href="/help">Help Center</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h5>Company</h5>
+            <ul>
+              <li><a href="/about">About</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/careers">Careers</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h5>Settings</h5>
+            <div class="theme-toggle">
+              <label>Theme</label>
+              <div class="theme-switcher">
+                <div
+                  class="theme-option"
+                  data-theme="light"
+                  onclick="setTheme('light')"
+                  title="Light Mode"
+                >
+                  <i class="bi bi-sun"></i>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="system"
+                  onclick="setTheme('system')"
+                  title="System"
+                >
+                  <i class="bi bi-circle-half"></i>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="dark"
+                  onclick="setTheme('dark')"
+                  title="Dark Mode"
+                >
+                  <i class="bi bi-moon"></i>
+                </div>
+              </div>
+            </div>
+            <ul>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms of Service</a></li>
+              <li><a href="/cookies">Cookie Policy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-text">
+            &copy; {{ now().year }} Drift. All rights reserved.
+          </div>
+          <div class="social-links">
+            <a href="https://github.com/Open-Communication/Drift">GitHub</a>
+            <a href="https://discord.gg/drift">Discord</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Enhanced Theme management with animations
+      function setTheme(theme) {
+        localStorage.setItem("drift-theme", theme);
+
+        // Add click animation
+        const clickedOption = document.querySelector(`[data-theme="${theme}"]`);
+        if (clickedOption) {
+          // Ripple effect
+          clickedOption.classList.add("clicked");
+          setTimeout(() => {
+            clickedOption.classList.remove("clicked");
+          }, 500);
+
+          // Switching animation
+          clickedOption.classList.add("switching");
+          setTimeout(() => {
+            clickedOption.classList.remove("switching");
+          }, 800);
+        }
+
+        applyTheme(theme);
+      }
+
+      function applyTheme(theme) {
+        const html = document.documentElement;
+        const options = document.querySelectorAll(".theme-option");
+
+        if (theme === "system") {
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+            .matches
+            ? "dark"
+            : "light";
+          html.setAttribute("data-theme", systemTheme);
+        } else {
+          html.setAttribute("data-theme", theme);
+        }
+
+        // Update active states with smooth transition
+        options.forEach((option) => {
+          option.classList.remove("active");
+          if (option.dataset.theme === theme) {
+            // Delay to allow for switching animation
+            setTimeout(() => {
+              option.classList.add("active");
+            }, 400);
+          }
+        });
+      }
+
+      // Initialize theme on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        const savedTheme = localStorage.getItem("drift-theme") || "system";
+
+        // Apply theme without animations on initial load
+        const html = document.documentElement;
+        const options = document.querySelectorAll(".theme-option");
+
+        if (savedTheme === "system") {
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+            .matches
+            ? "dark"
+            : "light";
+          html.setAttribute("data-theme", systemTheme);
+        } else {
+          html.setAttribute("data-theme", savedTheme);
+        }
+
+        // Set initial active state
+        options.forEach((option) => {
+          if (option.dataset.theme === savedTheme) {
+            option.classList.add("active");
+          }
+        });
+
+        // Listen for system theme changes
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", function () {
+            const currentTheme =
+              localStorage.getItem("drift-theme") || "system";
+            if (currentTheme === "system") {
+              applyTheme("system");
+            }
+          });
+      });
+    </script>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
