@@ -116,7 +116,7 @@ Conversations{% endblock %} {% block head %}
         Be part of a community that values authentic dialogue
       </p>
       <div class="cta-buttons">
-        <a href="/signup" class="btn btn-primary btn-hero me-3">Get Started</a>
+        <a href="{{url_for("auth.register")}}" class="btn btn-primary btn-hero me-3">Get Started</a>
         <a
           href="https://github.com/Open-Communication/Drift"
           class="btn btn-outline-hero"
